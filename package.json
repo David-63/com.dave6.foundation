@@ -1,0 +1,21 @@
+{
+  "name": "com.dave6.foundation",
+  "version": "0.0.2",
+  "displayName": "Dave Foundation",
+  "description": "추상적으로 사용 가능한 범용 기능 모음집.",
+  "unity": "6000.0",
+  "unityRelease": "0",
+  "documentationUrl": "https://github.com/David-63/com.dave6.foundation#readme",
+  "changelogUrl": "https://github.com/David-63/com.dave6.foundation/releases",
+  "licensesUrl": "https://github.com/David-63/com.dave6.foundation/blob/main/LICENSE",
+  "keywords": [
+    "state-machine",
+    "grid",
+    "modular"
+  ],
+  "author": {
+    "name": "David-63",
+    "email": "jiseop.63@gmail.com",
+    "url": "https://github.com/David-63"
+  }
+}
