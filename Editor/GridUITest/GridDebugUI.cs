@@ -6,21 +6,21 @@ namespace Dave6.FoundationEditor
 {
     public class GridDebugUI : MonoBehaviour
     {
-        VisualElement root;
-        VisualElement curCell;
+        VisualElement _Root;
+        VisualElement _CurCell;
 
 
-        [SerializeField] Vector2Int gridSize = new Vector2Int(4, 4);
+        [SerializeField] Vector2Int _GridSize = new Vector2Int(4, 4);
 
-        [SerializeField] float cellSize = 64f;
+        [SerializeField] float _CellSize = 64f;
 
 
         void Awake()
         {
             var doc = GetComponent<UIDocument>();
-            root = doc.rootVisualElement.Q<VisualElement>("root");
+            _Root = doc.rootVisualElement.Q<VisualElement>("root");
 
-            DrawGrid(gridSize.x, gridSize.y);
+            DrawGrid(_GridSize.x, _GridSize.y);
         }
 
         void DrawGrid(int width, int height)
@@ -29,7 +29,7 @@ namespace Dave6.FoundationEditor
             grid.style.flexDirection = FlexDirection.Row;
             grid.style.flexWrap = Wrap.Wrap;
             grid.style.alignContent = Align.FlexStart;
-            grid.style.width = width * cellSize;
+            grid.style.width = width * _CellSize;
 
             for (int y = 0; y < height; y++)
             {
@@ -39,14 +39,14 @@ namespace Dave6.FoundationEditor
                 }
             }
 
-            root.Add(grid);
+            _Root.Add(grid);
         }
 
         VisualElement CreateCell(int x, int y)
         {
             var cell = new VisualElement();
-            cell.style.width = cellSize;
-            cell.style.height = cellSize;
+            cell.style.width = _CellSize;
+            cell.style.height = _CellSize;
             cell.style.borderBottomWidth = 1;
             cell.style.borderTopWidth = 1;
             cell.style.borderLeftWidth = 1;
@@ -60,13 +60,13 @@ namespace Dave6.FoundationEditor
 
             cell.RegisterCallback<ClickEvent>(_ =>
             {
-                if (curCell != null)
+                if (_CurCell != null)
                 {
-                    curCell.style.backgroundColor = Color.clear;
+                    _CurCell.style.backgroundColor = Color.clear;
                 }
-                curCell = cell;
+                _CurCell = cell;
                 var coord = (GridCoord)cell.userData;
-                Debug.Log($"Clicked Cell: {coord.x}, {coord.y}");
+                Debug.Log($"Clicked Cell: {coord.X}, {coord.Y}");
                 SetOccupied(cell);
             });
 

@@ -2,15 +2,15 @@ namespace Dave6.Foundation.Collections
 {
     public class Grid2D<T>
     {
-        public readonly int width;
-        public readonly int height;
-        readonly T[,] cells;
+        public readonly int Width;
+        public readonly int Height;
+        readonly T[,] _Cells;
 
         public Grid2D(int width, int height)
         {
-            this.width = width;
-            this.height = height;
-            cells = new T[width, height];
+            Width = width;
+            Height = height;
+            _Cells = new T[width, height];
         }
 
         #region 접근
@@ -19,7 +19,7 @@ namespace Dave6.Foundation.Collections
         /// </summary>
         public bool IsInside(GridCoord coord)
         {
-            return coord.x >= 0 && coord.x < width && coord.y >= 0 && coord.y < height;
+            return coord.X >= 0 && coord.X < Width && coord.Y >= 0 && coord.Y < Height;
         }
         public bool TryGetCell(GridCoord coord, out T value)
         {
@@ -29,14 +29,14 @@ namespace Dave6.Foundation.Collections
                 return false;
             }
 
-            value = cells[coord.x, coord.y];
+            value = _Cells[coord.X, coord.Y];
             return true;
         }
 
         public void SetCell(GridCoord coord, T value)
         {
             if (!IsInside(coord)) return;
-            cells[coord.x, coord.y] = value;
+            _Cells[coord.X, coord.Y] = value;
         }
         public void SetCellRect(GridRect rect, T value)
         {
@@ -48,7 +48,7 @@ namespace Dave6.Foundation.Collections
         public void ClearCell(GridCoord coord)
         {
             if (!IsInside(coord)) return;
-            cells[coord.x, coord.y] = default;
+            _Cells[coord.X, coord.Y] = default;
         }
         public void ClearCellRect(GridRect rect)
         {

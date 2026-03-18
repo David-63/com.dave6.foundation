@@ -2,9 +2,9 @@ namespace Dave6.Foundation.GameLogic.State
 {
     public abstract class BaseState<TOwner> : IState
     {
-        protected TOwner controller;
+        protected TOwner _Controller;
 
-        public BaseState(TOwner controller) => this.controller = controller;
+        public BaseState(TOwner controller) => _Controller = controller;
         public virtual void OnEnter() { }
         public virtual void OnExit() { }
         public virtual void Update() { }

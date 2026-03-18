@@ -5,18 +5,18 @@ namespace Dave6.Foundation.GameLogic.State
 {
     public class StateMachine
     {
-        StateNode currentNode;
-        Dictionary<Type, StateNode> nodes = new();
-        HashSet<ITransition> anyTransitions = new();
+        StateNode _CurrentNode;
+        Dictionary<Type, StateNode> _Nodes = new();
+        HashSet<ITransition> _AnyTransitions = new();
 
-        public IState CurrentState => currentNode.State;
-        public IState GetStateByType(Type type) => nodes[type].State;
+        public IState CurrentState => _CurrentNode.State;
+        public IState GetStateByType(Type type) => _Nodes[type].State;
 
-        bool debugMode = false;
+        bool _DebugMode = false;
 
         public void SetDebug(bool enable)
         {
-            debugMode = enable;
+            _DebugMode = enable;
         }
 
         public void Update()
@@ -26,27 +26,27 @@ namespace Dave6.Foundation.GameLogic.State
             {
                 ChangeState(transitions.To);
             }
-            currentNode.State?.Update();
+            _CurrentNode.State?.Update();
         }
 
         public void FixedUpdate()
         {
-            currentNode.State?.FixedUpdate();
+            _CurrentNode.State?.FixedUpdate();
         }
         public void LateUpdate()
         {
-            currentNode.State?.LateUpdate();
+            _CurrentNode.State?.LateUpdate();
         }
 
 
         ITransition GetTransition()
         {
-            foreach (var transition in anyTransitions)
+            foreach (var transition in _AnyTransitions)
             {
                 if (transition.Condition.Evaluate()) return transition;
             }
 
-            foreach (var transition in currentNode.Transitions)
+            foreach (var transition in _CurrentNode.Transitions)
             {
                 if (transition.Condition.Evaluate()) return transition;
             }
@@ -55,16 +55,16 @@ namespace Dave6.Foundation.GameLogic.State
         }
         public void SetState(IState state)
         {
-            currentNode = nodes[state.GetType()];
-            currentNode.State.OnEnter();
+            _CurrentNode = _Nodes[state.GetType()];
+            _CurrentNode.State.OnEnter();
         }
 
         void ChangeState(IState state)
         {
-            if (state == currentNode.State) return;
+            if (state == _CurrentNode.State) return;
 
-            var previousState = currentNode.State;
-            var nextState = nodes[state.GetType()].State;
+            var previousState = _CurrentNode.State;
+            var nextState = _Nodes[state.GetType()].State;
 
             // if (debugMode)
             // {
@@ -73,7 +73,7 @@ namespace Dave6.Foundation.GameLogic.State
 
             previousState?.OnExit();
             nextState?.OnEnter();
-            currentNode = nodes[state.GetType()];
+            _CurrentNode = _Nodes[state.GetType()];
         }
 
         public void AddTransition(IState from, IState to, IPredicate condition)
@@ -82,16 +82,16 @@ namespace Dave6.Foundation.GameLogic.State
         }
         public void AddAnyTransition(IState to, IPredicate condition)
         {
-            anyTransitions.Add(new Transition(GetOrAddNode(to).State, condition));
+            _AnyTransitions.Add(new Transition(GetOrAddNode(to).State, condition));
         }
 
         StateNode GetOrAddNode(IState state)
         {
-            var node = nodes.GetValueOrDefault(state.GetType());
+            var node = _Nodes.GetValueOrDefault(state.GetType());
             if (node == null)
             {
                 node = new StateNode(state);
-                nodes.Add(state.GetType(), node);
+                _Nodes.Add(state.GetType(), node);
             }
             return node;
         }

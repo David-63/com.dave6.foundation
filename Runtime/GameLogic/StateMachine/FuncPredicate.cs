@@ -4,8 +4,8 @@ namespace Dave6.Foundation.GameLogic.State
 {
     public class FuncPredicate : IPredicate
     {
-        readonly Func<bool> func;
-        public FuncPredicate(Func<bool> func) => this.func = func;
-        public bool Evaluate() => func.Invoke();
+        readonly Func<bool> _Func;
+        public FuncPredicate(Func<bool> func) => _Func = func;
+        public bool Evaluate() => _Func.Invoke();
     }
 }
