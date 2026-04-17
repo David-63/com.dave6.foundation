@@ -1,6 +1,6 @@
 {
   "name": "com.dave6.foundation",
-  "version": "0.0.3",
+  "version": "0.0.4",
   "displayName": "Dave Foundation",
   "description": "추상적으로 사용 가능한 범용 기능 모음집.",
   "unity": "6000.0",

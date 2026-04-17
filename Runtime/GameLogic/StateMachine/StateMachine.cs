@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEngine;
 
 namespace Dave6.Foundation.GameLogic.State
 {
@@ -43,11 +44,15 @@ namespace Dave6.Foundation.GameLogic.State
         {
             foreach (var transition in _AnyTransitions)
             {
+                if (!CanTransition(transition.To)) continue;
+
                 if (transition.Condition.Evaluate()) return transition;
             }
 
             foreach (var transition in _CurrentNode.Transitions)
             {
+                if (!CanTransition(transition.To)) continue;
+
                 if (transition.Condition.Evaluate()) return transition;
             }
 
@@ -66,10 +71,10 @@ namespace Dave6.Foundation.GameLogic.State
             var previousState = _CurrentNode.State;
             var nextState = _Nodes[state.GetType()].State;
 
-            // if (debugMode)
-            // {
-            //     Debug.Log($"[StateMachine] {previousState?.GetType().Name} -> {nextState.GetType().Name}");
-            // }
+            if (_DebugMode)
+            {
+                Debug.Log($"[StateMachine] {previousState?.GetType().Name} -> {nextState.GetType().Name}");
+            }
 
             previousState?.OnExit();
             nextState?.OnEnter();
@@ -95,6 +100,19 @@ namespace Dave6.Foundation.GameLogic.State
             }
             return node;
         }
+
+        bool CanTransition(IState next)
+        {
+            var current = _CurrentNode.State;
+
+            // 잠긴 상태
+            if (!current.CanBeOverridden()) return false;
+            // 특정 상태 필터
+            if (current.CanOverrideBy(next)) return true;
+
+            return current.CanExit();
+        }
+
 
         
         public void At(IState from, IState to, IPredicate condition) => AddTransition(from, to, condition);
